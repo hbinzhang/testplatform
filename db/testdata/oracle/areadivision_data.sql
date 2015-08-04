@@ -1,0 +1,4 @@
+﻿
+INSERT INTO AREADIVISION VALUES ('1e2ee60c06d74d6380b3a3a1276807d2','chaoyang','朝阳','','三元桥,北京SCA');
+INSERT INTO AREADIVISION VALUES ('5edd9da4be0c407d83f6b34d93c1ba15','101','海淀','','海淀桥,保福寺');
+INSERT INTO AREADIVISION VALUES ('83063d33aa02442b886c09fb8dcefdc6','102','测试区域','','net22,net33,net44');

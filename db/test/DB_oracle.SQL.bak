@@ -1,0 +1,105 @@
+DROP TABLE MAINTAINER;
+
+CREATE TABLE MAINTAINER
+(
+	ID VARCHAR(128) NOT NULL PRIMARY KEY ,
+	LOGINNAME VARCHAR(128) NOT NULL ,
+	NAME VARCHAR(128) NOT NULL ,
+	TITLE varchar(100)  ,
+	MOBILE varchar(20)  ,
+	password varchar(128) 
+) ;
+
+DROP TABLE MANAGER;
+
+CREATE TABLE MANAGER
+(
+	ID VARCHAR(128) NOT NULL PRIMARY KEY ,
+	LOGINNAME VARCHAR(128) NOT NULL ,
+	NAME VARCHAR(128) NOT NULL ,
+	TITLE varchar(100)  ,
+	MOBILE varchar(20)  ,
+	password varchar(128) ,
+	email varchar(128) NOT NULL 
+) ;
+
+DROP TABLE AREADIVISION;
+CREATE TABLE AREADIVISION
+(
+	ID VARCHAR(128) NOT NULL PRIMARY KEY ,
+	CODE VARCHAR(128) NOT NULL ,
+	NAME VARCHAR(128) NOT NULL ,
+	MAINTAINERS varchar(200)  ,
+	DEVICES varchar(200)  
+) ;
+
+DROP TABLE AREAMAINTAINERS;
+CREATE TABLE AREAMAINTAINERS
+(
+	ID VARCHAR(128) NOT NULL PRIMARY KEY ,
+	AREACODE VARCHAR(128) NOT NULL ,
+	MAINTAINERNAME VARCHAR(128) NOT NULL 
+) ;
+
+DROP TABLE AREADEVICES;
+CREATE TABLE AREADEVICES
+(
+	ID VARCHAR(128) NOT NULL PRIMARY KEY ,
+	AREACODE VARCHAR(128) NOT NULL ,
+	DEVICEID VARCHAR(128) NOT NULL ,
+	DEVICENAME VARCHAR(128) NOT NULL 
+) ;
+
+DROP TABLE MANAGEDDEVICE;
+CREATE TABLE MANAGEDDEVICE
+(
+	ID VARCHAR(128) NOT NULL PRIMARY KEY,
+	NEID VARCHAR(128) NOT NULL,
+	NENAME VARCHAR(128) NOT NULL,
+	NEVERSION VARCHAR(128) NOT NULL,
+	NETYPE VARCHAR(128) NOT NULL
+);
+
+DROP TABLE ALARM;
+CREATE TABLE ALARM
+(
+	ID VARCHAR(128) NOT NULL PRIMARY KEY,
+	streamCode VARCHAR(128) NOT NULL,
+	type VARCHAR(128),
+	name VARCHAR(128),
+	neid VARCHAR(128),
+	level VARCHAR(128),
+	effect VARCHAR(128),
+	description VARCHAR(128),
+	createTime VARCHAR(128),
+	isClear VARCHAR(128),
+	clearTime VARCHAR(128),
+	isAck VARCHAR(128),
+	ackTime VARCHAR(128),
+	maintainerId VARCHAR(128)
+);
+
+-- test data
+INSERT INTO MANAGEDDEVICE VALUES ('1', '1', '海淀桥', 'v1.0', 'eNodeB');
+INSERT INTO MANAGEDDEVICE VALUES ('2', '2', '保福寺', 'v1.0', 'eNodeB');
+INSERT INTO MANAGEDDEVICE VALUES ('3', '3', '三元桥', 'v1.0', 'eNodeB');
+INSERT INTO MANAGEDDEVICE VALUES ('4', '4', '七里庄', 'v1.0', 'eNodeB');
+INSERT INTO MANAGEDDEVICE VALUES ('5', '5', '十八里店', 'v1.0', 'eNodeB');
+INSERT INTO MANAGEDDEVICE VALUES ('6', '6', '大红门', 'v1.0', 'eNodeB');
+INSERT INTO MANAGEDDEVICE VALUES ('7', '7', '定慧桥', 'v1.0', 'eNodeB');
+INSERT INTO MANAGEDDEVICE VALUES ('8', '8', '积水潭', 'v1.0', 'eNodeB');
+INSERT INTO MANAGEDDEVICE VALUES ('9', '9', '北京SCA', 'v3.0', 'SCA');
+INSERT INTO MANAGEDDEVICE VALUES ('10', '10', '北京MME', 'v2.0', 'MME');
+
+INSERT INTO ALARM VALUES ('654313164', '1', '硬件告警', 'MCB板卡掉电', '1', '主要告警', '主控板失效', '', 'Fri Jul 31 09:40:25 CST 2015', 'NO', '', 'NO', '', '张三');
+INSERT INTO ALARM VALUES ('654313165', '2', '服务告警', 'CPB断连', '1', '严重告警', 'CPB断连', '', 'Fri Jul 31 09:40:25 CST 2015', 'NO', '', 'NO', '', '李四');
+INSERT INTO ALARM VALUES ('654313166', '3', '软件告警', '小区退服', '3', '次要告警', '小区退服', '', 'Fri Jul 31 09:40:25 CST 2015', 'NO', '', 'NO', '', '张三');
+INSERT INTO ALARM VALUES ('654313167', '4', '环境告警', '基站退服', '6', '警告告警', '基站退服', '', 'Fri Jul 31 09:40:25 CST 2015', 'NO', '', 'NO', '', '李四');
+INSERT INTO ALARM VALUES ('654313168', '5', '硬件告警', '时钟失步', '7', '主要告警', '时钟失步', '', 'Fri Jul 31 09:40:25 CST 2015', 'NO', '', 'NO', '', '张三');
+INSERT INTO ALARM VALUES ('654313119', '6', '环境告警', '板卡掉电', '2', '警告告警', '板卡掉电', '', 'Fri Jul 31 09:40:25 CST 2015', 'NO', '', 'NO', '', '李四');
+INSERT INTO ALARM VALUES ('654313124', '7', '环境告警', 'OM断链', '9', '主要告警', 'OM断链', '', 'Fri Jul 31 09:40:25 CST 2015', 'NO', '', 'NO', '', '李四');
+INSERT INTO ALARM VALUES ('654313134', '8', '软件告警', '光纤断链', '10', '警告告警', '光纤断链', '', 'Fri Jul 31 09:40:25 CST 2015', 'NO', '', 'NO', '', '李四');
+INSERT INTO ALARM VALUES ('654313144', '9', '软件告警', '性能文件采集超时', '1', '主要告警', '性能文件采集超时', '', 'Fri Jul 31 09:40:25 CST 2015', 'NO', '', 'NO', '', '张三');
+INSERT INTO ALARM VALUES ('654313164', '10', '服务告警', 'MCB板卡掉电', '4', '严重告警', 'MCB板卡掉电', '', 'Fri Jul 31 09:40:25 CST 2015', 'NO', '', 'NO', '', '张三');
+INSERT INTO ALARM VALUES ('654313174', '11', '硬件告警', '时钟失步', '2', '严重告警', '时钟失步', '', 'Fri Jul 31 09:40:25 CST 2015', 'NO', '', 'NO', '', '张三');
+

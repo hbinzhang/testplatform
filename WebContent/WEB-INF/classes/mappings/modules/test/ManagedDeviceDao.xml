@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cpit.testplatform.modules.test.dao.ManagedDeviceDao" >
+<resultMap id="BaseResultMap" type="com.cpit.testplatform.modules.test.entity.ManagedDevice" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="neid" property="neid" jdbcType="VARCHAR" />
+    <result column="nename" property="neName" jdbcType="VARCHAR" />
+    <result column="netype" property="neType" jdbcType="VARCHAR" />
+    <result column="neversion" property="neVersion" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+    id, neid, nename, netype, neversion
+  </sql>
+  <select id="get" resultMap="BaseResultMap"  >
+    select 
+    <include refid="Base_Column_List" />
+    from ManagedDevice
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+	<!-- 分页查询用户信息 -->
+	<select id="findList" resultMap="BaseResultMap">
+		SELECT
+		<include refid="Base_Column_List" />
+		from ManagedDevice a
+		WHERE 1 = 1
+		<!-- 数据范围过滤 -->
+		${sqlMap.dsf}
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.neid
+			</otherwise>
+		</choose>
+	</select>
+	<!-- 根据登录名查询用户 -->
+	<select id="getByName" resultMap="BaseResultMap">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM ManagedDevice a
+		WHERE a.neName = #{neName,jdbcType=VARCHAR}
+	</select>
+	<select id="getByNeid" resultMap="BaseResultMap" parameterType="java.lang.String">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM ManagedDevice a
+		WHERE a.neid = #{neid,jdbcType=VARCHAR}
+	</select>
+	<select id="getAll" resultMap="BaseResultMap">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM ManagedDevice
+	</select>
+  <update id="delete" parameterType="java.lang.String" >
+    delete from ManagedDevice 
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+	<insert id="insert"
+		parameterType="com.cpit.testplatform.modules.test.entity.ManagedDevice">
+		insert into AreaDevices (id, neid, nename, netype, neversion)
+		values ( #{id,jdbcType=VARCHAR},
+		#{neid,jdbcType=VARCHAR},
+		#{neName,jdbcType=VARCHAR},
+		#{neType,jdbcType=VARCHAR},
+		#{neVersion,jdbcType=VARCHAR})
+	</insert>
+	<update id="update"
+		parameterType="com.cpit.testplatform.modules.test.entity.ManagedDevice">
+		update AreaDevices
+		set neid = #{neid,jdbcType=VARCHAR},
+		neName = #{neName,jdbcType=VARCHAR},
+		neType = #{neType,jdbcType=VARCHAR},
+		neVersion = #{neVersion,jdbcType=VARCHAR}
+	</update>
+</mapper>

@@ -1,0 +1,10 @@
+@CHARSET "UTF-8";
+
+
+
+.banner {
+	width: 996px;
+	height: 58px;
+	background: url(images/banner.png) no-repeat scroll 0 0 transparent;
+}
+

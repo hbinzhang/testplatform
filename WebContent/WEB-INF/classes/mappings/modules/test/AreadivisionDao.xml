@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cpit.testplatform.modules.test.dao.AreadivisionDao" >
+<resultMap id="AreadivisionBaseResultMap" type="com.cpit.testplatform.modules.test.entity.Areadivision" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="code" property="code" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="maintainers" property="maintainers" jdbcType="VARCHAR" />
+    <result column="devices" property="devices" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+    id, code, name, maintainers, devices
+  </sql>
+  <select id="get" resultMap="AreadivisionBaseResultMap"  >
+    select 
+    <include refid="Base_Column_List" />
+    from Areadivision
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+	<!-- 分页查询用户信息 -->
+	<select id="findList" resultMap="AreadivisionBaseResultMap">
+		SELECT
+		<include refid="Base_Column_List" />
+		from Areadivision a
+		WHERE 1 = 1
+		<!-- 数据范围过滤 -->
+		${sqlMap.dsf}
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.name
+			</otherwise>
+		</choose>
+	</select>
+	<!-- 根据登录名查询用户 -->
+	<select id="getByName" resultMap="AreadivisionBaseResultMap">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM areadivision a
+		WHERE a.name = #{name,jdbcType=VARCHAR}
+	</select>
+  <update id="delete" parameterType="java.lang.String" >
+    delete from areadivision 
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+	<insert id="insert"
+		parameterType="com.cpit.testplatform.modules.test.entity.Areadivision">
+		insert into Areadivision (id, code, name, maintainers, devices)
+		values ( #{id,jdbcType=VARCHAR},
+		#{code,jdbcType=VARCHAR},
+		#{name,jdbcType=VARCHAR},
+		#{maintainers,jdbcType=VARCHAR},
+		#{devices,jdbcType=VARCHAR})
+	</insert>
+	<update id="update"
+		parameterType="com.cpit.testplatform.modules.test.entity.Areadivision">
+		update Areadivision
+		set name = #{name,jdbcType=VARCHAR},
+		code = #{code,jdbcType=VARCHAR},
+		maintainers = #{maintainers,jdbcType=VARCHAR},
+		devices = #{devices,jdbcType=VARCHAR}
+		where id = #{id,jdbcType=VARCHAR}
+	</update>
+</mapper>

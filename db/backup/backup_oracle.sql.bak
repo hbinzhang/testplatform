@@ -1,0 +1,48 @@
+/* Drop Tables */
+
+DROP TABLE backup_plan;
+DROP TABLE backup_history;
+
+/* create sequence */
+create or replace sequence backup_plan_seq start with 1 increment by 1;
+create or replace sequence backup_history_seq start with 1 increment by 1;
+
+/* Create Tables */
+
+CREATE TABLE backup_plan
+(
+  id int NOT NULL auto_increment COMMENT '编号',
+	type int NOT NULL COMMENT '备份类型',
+	level int NOT NULL COMMENT '级别',
+	value int NOT NULL COMMENT '间隔',
+	start_time timestamp NOT NULL COMMENT '开始时间',
+	PRIMARY KEY (id)
+) COMMENT = '备份计划表';
+
+create or replace trigger backup_plan_trigger        
+before insert on backup_plan        
+for each row        
+begin        
+select backup_plan_seq.nextval into :new.id from dual;       
+end ;    
+
+
+CREATE TABLE backup_history
+(
+  id int NOT NULL auto_increment COMMENT '编号',
+  start_time timestamp NOT NULL COMMENT '开始时间',
+	duration int NOT NULL COMMENT '执行时长(秒)',
+	type int NOT NULL COMMENT '备份类型',
+	result tinyint NOT NULL COMMENT '成功标记',
+	file_path varchar(200) NULL COMMENT '数据位置',
+	file_size int NULL COMMENT '数据大小(K)',
+	PRIMARY KEY (id)
+) COMMENT = '备份历史表';
+
+create or replace trigger backup_history_trigger        
+before insert on backup_history        
+for each row        
+begin        
+select backup_history.nextval into :new.id from dual;       
+end ;   
+

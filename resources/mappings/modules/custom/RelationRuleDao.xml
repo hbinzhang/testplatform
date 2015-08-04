@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cpit.testplatform.modules.custom.dao.RelationRuleDao">
+	<resultMap id="BaseResultMap"
+		type="com.cpit.testplatform.modules.custom.entity.RelationRule">
+		<id column="name" property="name" jdbcType="VARCHAR" />
+		<result column="alarm_type" property="alarmType" jdbcType="VARCHAR" />
+		<result column="time_range" property="timeRange" jdbcType="INTEGER" />
+		<result column="related_alarm_type" property="relatedAlarmType"
+			jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		name, alarm_type, time_range, related_alarm_type
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from filter_relation
+		where name = #{name,jdbcType=VARCHAR}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from filter_relation
+		where name = #{name,jdbcType=VARCHAR}
+	</delete>
+	<insert id="insert"
+		parameterType="com.cpit.testplatform.modules.custom.entity.RelationRule">
+		insert into filter_relation (name, alarm_type, 
+		time_range, related_alarm_type)
+		values (#{name,jdbcType=VARCHAR}, #{alarmType,jdbcType=VARCHAR},
+		#{timeRange,jdbcType=INTEGER}, #{relatedAlarmType,jdbcType=VARCHAR})
+	</insert>
+	<update id="updateByPrimaryKey"
+		parameterType="com.cpit.testplatform.modules.custom.entity.RelationRule">
+		update filter_relation
+		set alarm_type = #{alarmType,jdbcType=VARCHAR},
+		time_range = #{timeRange,jdbcType=INTEGER},
+		related_alarm_type = #{relatedAlarmType,jdbcType=VARCHAR}
+		where name = #{name,jdbcType=VARCHAR}
+	</update>
+	<select id="findList" resultMap="BaseResultMap" >
+		select
+		<include refid="Base_Column_List" />
+		from filter_relation
+		<if test="name != null and name != ''">
+			where a.name like
+			<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+			<if test="dbName == 'mysql'">CONCAT('%', #{name}, '%')</if>
+		</if>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY name
+			</otherwise>
+		</choose>
+	</select>
+</mapper>

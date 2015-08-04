@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cpit.testplatform.modules.stat.dao.AlarmStatDao">
+	<resultMap id="BaseResultMap"
+		type="com.cpit.testplatform.modules.stat.entity.AlarmStat">
+		<id column="stat_time" property="statTime" jdbcType="DATE" />
+		<id column="ne_id" property="neId" jdbcType="VARCHAR" />
+		<result column="ne_label" property="neLabel" jdbcType="VARCHAR" />
+		<result column="total" property="total" jdbcType="INTEGER" />
+		<result column="duration" property="duration" jdbcType="INTEGER" />
+		<result column="criticalCount" property="criticalCount" jdbcType="INTEGER" />
+		<result column="majorCount" property="majorCount" jdbcType="INTEGER" />
+		<result column="minorCount" property="minorCount" jdbcType="INTEGER" />
+		<result column="warnCount" property="warnCount" jdbcType="INTEGER" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		stat_time, ne_id, ne_label, total, duration, criticalCount, majorCount, minorCount, warnCount
+	</sql>
+	<insert id="insert" parameterType="com.cpit.testplatform.modules.stat.entity.AlarmStat">
+		insert into stat_alarm_day (stat_time, ne_id, ne_label, total,
+		duration, criticalCount, majorCount, minorCount, warnCount)
+		values (
+		#{statTime,jdbcType=DATE}, 
+		#{neId,jdbcType=VARCHAR},
+		#{neLabel,jdbcType=VARCHAR},
+		#{total,jdbcType=INTEGER}, 
+		#{duration,jdbcType=INTEGER}, 
+		#{criticalCount,jdbcType=INTEGER}, 
+		#{majorCount,jdbcType=INTEGER}, 
+		#{minorCount,jdbcType=INTEGER}, 
+		#{warnCount,jdbcType=INTEGER})
+	</insert>
+
+	<select id="selectByDay" parameterType="com.cpit.testplatform.modules.stat.entity.AlarmStat"
+		resultMap="BaseResultMap">
+		select 
+		<if test="total != null and total == 2">
+		d.AREACODE as ne_id, v.name as ne_label,  sum(s.total) as total,
+		sum(s.criticalCount) as criticalCount,sum(s.majorCount) as majorCount,
+		sum(s.minorCount) as minorCount,sum(s.warnCount) as warnCount, sum(s.duration) as duration
+		from stat_alarm_day s, areadevices d, areadivision v  
+		</if>
+		<if test="total == null or total != 2">
+		s.* from stat_alarm_day s, areadevices d 
+		</if>
+		where s.ne_id = d.DEVICEID
+		and s.stat_time = #{statTime,jdbcType=DATE}
+		<if test="neLabel != null and neLabel != ''">
+		and d.AREACODE =#{neLabel,jdbcType=VARCHAR}
+		</if>
+		<if test="total != null and total == 2">
+		  <if test="neLabel != null and neLabel != ''">
+		  and d.AREACODE =#{neLabel,jdbcType=VARCHAR}
+		  </if>
+		and d.AREACODE = v.code
+		group by d.AREACODE, v.name  
+		</if>
+		<if test="total == null or total != 2">
+		  <if test="neLabel != null and neLabel != ''">
+		  and s.ne_id =#{neLabel,jdbcType=VARCHAR} 
+		  </if>
+		</if>
+		
+	</select>
+
+	<select id="selectByMonth" parameterType="com.cpit.testplatform.modules.stat.entity.AlarmStat"
+		resultMap="BaseResultMap">
+		select 
+		<if test="total != null and total == 2">
+		d.AREACODE as ne_id, v.name as ne_label,  sum(s.total) as total,
+		sum(s.criticalCount) as criticalCount,sum(s.majorCount) as majorCount,
+		sum(s.minorCount) as minorCount,sum(s.warnCount) as warnCount,  sum(s.duration) as duration  
+		from stat_alarm_day s, areadevices d, areadivision v  
+		</if>
+		<if test="total == null or total != 2">
+		s.ne_id, s.ne_label, sum(s.total) as total, sum(s.duration) as duration  
+		from stat_alarm_day s, areadevices d
+		</if>
+		where s.ne_id = d.DEVICEID
+		and s.stat_time &gt;= #{statTime,jdbcType=DATE} and s.stat_time &lt;
+		<if test="dbName == 'oracle'">add_months(#{statTime,jdbcType=DATE},1)</if>
+		<if test="dbName == 'mysql'">date_add(#{statTime,jdbcType=DATE}, interval 1 month)</if>
+		
+		<if test="total != null and total == 2">
+		  <if test="neLabel != null and neLabel != ''">
+		  and d.AREACODE =#{neLabel,jdbcType=VARCHAR} 
+		  </if>
+		and d.AREACODE = v.code
+		group by d.AREACODE  , v.name 
+		</if>
+		<if test="total == null or total != 2">
+		  <if test="neLabel != null and neLabel != ''">
+		  and s.ne_id =#{neLabel,jdbcType=VARCHAR} 
+		  </if>
+		group by s.ne_id
+		</if>
+	</select>
+
+	<update id="addStat" parameterType="com.cpit.testplatform.modules.stat.entity.AlarmStat">
+		update stat_alarm_day
+		set total = total + #{total,jdbcType=INTEGER},
+		duration = duration + #{duration,jdbcType=INTEGER},
+		criticalCount = criticalCount + #{criticalCount,jdbcType=INTEGER},
+		majorCount = majorCount + #{majorCount,jdbcType=INTEGER},
+		minorCount = minorCount + #{minorCount,jdbcType=INTEGER},
+		warnCount = warnCount + #{warnCount,jdbcType=INTEGER}
+		where stat_time = #{statTime,jdbcType=DATE}
+		<if test="neLabel != null and neLabel != ''">
+		and ne_id = #{neId,jdbcType=VARCHAR}
+		</if>
+	</update>
+
+</mapper>

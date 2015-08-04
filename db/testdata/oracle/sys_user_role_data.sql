@@ -1,0 +1,2 @@
+﻿
+INSERT INTO SYS_USER_ROLE VALUES ('1','1');

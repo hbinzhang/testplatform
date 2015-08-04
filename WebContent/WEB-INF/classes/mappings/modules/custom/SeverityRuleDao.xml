@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cpit.testplatform.modules.custom.dao.SeverityRuleDao">
+	<resultMap id="BaseResultMap"
+		type="com.cpit.testplatform.modules.custom.entity.SeverityRule">
+		<result column="critical" jdbcType="BIT" property="critical" />
+		<result column="major" jdbcType="BIT" property="major" />
+		<result column="minor" jdbcType="BIT" property="minor" />
+		<result column="warning" jdbcType="BIT" property="warning" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		critical, major, minor, warning
+	</sql>
+	<select id="select"
+		resultMap="BaseResultMap">
+		select critical, major, minor, warning
+		from filter_severity
+	</select>
+	<update id="update" parameterType="com.cpit.testplatform.modules.custom.entity.SeverityRule">
+		update filter_severity
+		set
+		critical = #{critical,jdbcType=BIT},
+		major =
+		#{major,jdbcType=BIT},
+		minor = #{minor,jdbcType=BIT},
+		warning = #{warning,jdbcType=BIT}
+	</update>
+	<insert id="insert"
+		parameterType="com.cpit.testplatform.modules.custom.entity.SeverityRule">
+		insert into filter_severity (critical, major, minor,
+		warning ) values
+		(#{critical,jdbcType=BIT}, #{major,jdbcType=BIT},
+		#{minor,jdbcType=BIT}, #{warning,jdbcType=BIT} )
+	</insert>
+</mapper>

@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cpit.testplatform.modules.display.dao.TicketInfoDao" >
+  <resultMap id="BaseResultMap" type="com.cpit.testplatform.modules.display.entity.TicketInfo" >
+    <id column="ticket_id" property="ticketId" jdbcType="VARCHAR" />
+    <result column="ne_id" property="neId" jdbcType="VARCHAR" />
+    <result column="ne_label" property="neLabel" jdbcType="VARCHAR" />
+    <result column="maintainer_id" property="maintainerId" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="detail" property="detail" jdbcType="VARCHAR" />
+    <result column="flag" property="flag" jdbcType="INTEGER" />
+    <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+    <result column="result" property="result" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    ticket_id, ne_id, ne_label, maintainer_id, create_time, detail, flag, end_time, result
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.cpit.testplatform.modules.display.entity.TicketInfoExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from ticket_info
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from ticket_info
+    where ticket_id = #{ticketId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from ticket_info
+    where ticket_id = #{ticketId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.cpit.testplatform.modules.display.entity.TicketInfoExample" >
+    delete from ticket_info
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.cpit.testplatform.modules.display.entity.TicketInfo" >
+    insert into ticket_info (ticket_id, ne_id, ne_label, 
+      maintainer_id, create_time, detail, 
+      flag, end_time, result
+      )
+    values (#{ticketId,jdbcType=VARCHAR}, #{neId,jdbcType=VARCHAR}, #{neLabel,jdbcType=VARCHAR}, 
+      #{maintainerId,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{detail,jdbcType=VARCHAR}, 
+      #{flag,jdbcType=INTEGER}, #{endTime,jdbcType=TIMESTAMP}, #{result,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.cpit.testplatform.modules.display.entity.TicketInfo" >
+    insert into ticket_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="ticketId != null" >
+        ticket_id,
+      </if>
+      <if test="neId != null" >
+        ne_id,
+      </if>
+      <if test="neLabel != null" >
+        ne_label,
+      </if>
+      <if test="maintainerId != null" >
+        maintainer_id,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="detail != null" >
+        detail,
+      </if>
+      <if test="flag != null" >
+        flag,
+      </if>
+      <if test="endTime != null" >
+        end_time,
+      </if>
+      <if test="result != null" >
+        result,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="ticketId != null" >
+        #{ticketId,jdbcType=VARCHAR},
+      </if>
+      <if test="neId != null" >
+        #{neId,jdbcType=VARCHAR},
+      </if>
+      <if test="neLabel != null" >
+        #{neLabel,jdbcType=VARCHAR},
+      </if>
+      <if test="maintainerId != null" >
+        #{maintainerId,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="detail != null" >
+        #{detail,jdbcType=VARCHAR},
+      </if>
+      <if test="flag != null" >
+        #{flag,jdbcType=INTEGER},
+      </if>
+      <if test="endTime != null" >
+        #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="result != null" >
+        #{result,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.cpit.testplatform.modules.display.entity.TicketInfoExample" resultType="java.lang.Integer" >
+    select count(*) from ticket_info
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update ticket_info
+    <set >
+      <if test="record.ticketId != null" >
+        ticket_id = #{record.ticketId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.neId != null" >
+        ne_id = #{record.neId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.neLabel != null" >
+        ne_label = #{record.neLabel,jdbcType=VARCHAR},
+      </if>
+      <if test="record.maintainerId != null" >
+        maintainer_id = #{record.maintainerId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.detail != null" >
+        detail = #{record.detail,jdbcType=VARCHAR},
+      </if>
+      <if test="record.flag != null" >
+        flag = #{record.flag,jdbcType=INTEGER},
+      </if>
+      <if test="record.endTime != null" >
+        end_time = #{record.endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.result != null" >
+        result = #{record.result,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update ticket_info
+    set ticket_id = #{record.ticketId,jdbcType=VARCHAR},
+      ne_id = #{record.neId,jdbcType=VARCHAR},
+      ne_label = #{record.neLabel,jdbcType=VARCHAR},
+      maintainer_id = #{record.maintainerId,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      detail = #{record.detail,jdbcType=VARCHAR},
+      flag = #{record.flag,jdbcType=INTEGER},
+      end_time = #{record.endTime,jdbcType=TIMESTAMP},
+      result = #{record.result,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cpit.testplatform.modules.display.entity.TicketInfo" >
+    update ticket_info
+    <set >
+      <if test="neId != null" >
+        ne_id = #{neId,jdbcType=VARCHAR},
+      </if>
+      <if test="neLabel != null" >
+        ne_label = #{neLabel,jdbcType=VARCHAR},
+      </if>
+      <if test="maintainerId != null" >
+        maintainer_id = #{maintainerId,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="detail != null" >
+        detail = #{detail,jdbcType=VARCHAR},
+      </if>
+      <if test="flag != null" >
+        flag = #{flag,jdbcType=INTEGER},
+      </if>
+      <if test="endTime != null" >
+        end_time = #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="result != null" >
+        result = #{result,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ticket_id = #{ticketId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cpit.testplatform.modules.display.entity.TicketInfo" >
+    update ticket_info
+    set ne_id = #{neId,jdbcType=VARCHAR},
+      ne_label = #{neLabel,jdbcType=VARCHAR},
+      maintainer_id = #{maintainerId,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      detail = #{detail,jdbcType=VARCHAR},
+      flag = #{flag,jdbcType=INTEGER},
+      end_time = #{endTime,jdbcType=TIMESTAMP},
+      result = #{result,jdbcType=VARCHAR}
+    where ticket_id = #{ticketId,jdbcType=VARCHAR}
+  </update>
+  
+      <select id="findList" parameterType="com.cpit.testplatform.modules.display.entity.TicketInfo" resultMap="BaseResultMap" >
+    select  <include refid="Base_Column_List" />
+     from ticket_info
+      <if test="maintainerId != null" >
+    where maintainer_id = #{maintainerId,jdbcType=VARCHAR}
+      </if>
+  </select>
+
+</mapper>

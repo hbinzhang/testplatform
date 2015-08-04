@@ -1,0 +1,117 @@
+<%@ page contentType="text/html;charset=UTF-8"%>
+<%@ include file="/WEB-INF/views/include/taglib.jsp"%>
+<html>
+<head>
+<title>故障工单</title>
+<meta name="decorator" content="default" />
+<script src="http://api.map.baidu.com/api?v=1.4" type="text/javascript"></script>
+<script type="text/javascript">
+	function page(n, s) {
+		if (n)
+			$("#pageNo").val(n);
+		if (s)
+			$("#pageSize").val(s);
+		$("#searchForm").attr("action", "${ctx}/display/ticket/tracktlist");
+		$("#searchForm").submit();
+		return false;
+	}
+	function showMap() {
+		// 创建Map实例
+		var mapObject = new BMap.Map("trackMapDiv");
+
+		var a = ${mapdata};
+		var ps = new Array();
+		var i;
+		for (i = 0; i < a.length; i++) {
+			ps[i] = new BMap.Point(a[i][0], a[i][1]);
+		}
+		var center;
+		if (a && a.length>=1){
+			center =ps[0];
+		}else{
+			//默认重庆联通
+			center = new BMap.Point(106.503, 29.625);
+		}
+		mapObject.centerAndZoom(center, 10);
+
+		var polyline = new BMap.Polyline(ps, {
+			strokeColor : "blue",
+			strokeWeight : 6,
+			strokeOpacity : 0.5
+		});
+		mapObject.addOverlay(polyline);
+
+	}
+</script>
+<style type="text/css">
+#trackMapDiv {
+	width: 400px;
+	height: 300px;
+	overflow: hidden;
+	margin: 0;
+}
+</style>
+</head>
+<body>
+	<!--	<div id="importBox" class="hide">
+		<form id="importForm" action="${ctx}/test/terminal/import" method="post" enctype="multipart/form-data"
+			class="form-search" style="padding-left:20px;text-align:center;" onsubmit="loading('正在导入，请稍等...');"><br/>
+			<input id="uploadFile" name="file" type="file" style="width:330px"/><br/><br/>　　
+			<input id="btnImportSubmit" class="btn btn-primary" type="submit" value="   导    入   "/>
+			<a href="${ctx}/test/terminal/import/template">下载模板</a>
+		</form>
+	</div>-->
+	<ul class="nav nav-tabs">
+		<li><a href="${ctx}/display/ticket/ticketlist">故障工单列表</a></li>
+		<li><a
+			href="${ctx}/display/ticket/ticketlist?ticketId=${track.ticketId}">详细信息</a></li>
+		<li class="active"><a
+			href="${ctx}/display/ticket/tracklist?ticketId=${track.ticketId}">行程轨迹</a></li>
+		<li><a
+			href="${ctx}/display/ticket/processlist?ticketId=${track.ticketId}">处理过程</a></li>
+	</ul>
+	<div id="trackMapDiv"></div>
+	<sys:message content="${message}" />
+	<form:form id="searchForm" modelAttribute="rule"
+		action="${ctx}/display/ticket/tracktlist" method="post"
+		class="breadcrumb form-search ">
+		<input id="ticketId" name="ticketId" type="hidden"
+			value="${track.ticketId}" />
+		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}" />
+		<input id="pageSize" name="pageSize" type="hidden"
+			value="${page.pageSize}" />
+		<sys:tableSort id="orderBy" name="orderBy" value="${page.orderBy}"
+			callback="page();" />
+		<ul class="ul-form">
+			<li class="btns"><input id="btnSubmit" class="btn btn-primary"
+				type="submit" value="刷新" onclick="return page();" />
+			<li class="clearfix"></li>
+		</ul>
+	</form:form>
+	<table id="contentTable"
+		class="table table-striped table-bordered table-condensed">
+		<thead>
+			<tr>
+				<th>时间</th>
+				<th>经度</th>
+				<th>纬度</th>
+				<th>高度</th>
+			</tr>
+		</thead>
+		<tbody>
+			<c:forEach items="${page.list}" var="tk">
+				<tr>
+					<td>${tk.recordTime}</td>
+					<td>${tk.longtitude}</td>
+					<td>${tk.latitude}</td>
+					<td>${tk.altitude}</td>
+				</tr>
+			</c:forEach>
+		</tbody>
+	</table>
+	<div class="pagination">${page}</div>
+	<script type="text/javascript">
+			showMap();
+	</script>
+</body>
+</html>

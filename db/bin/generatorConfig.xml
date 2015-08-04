@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<generatorConfiguration>
+	<classPathEntry
+		location="..\..\WebContent\WEB-INF\lib\mysql-connector-java-5.1.30.jar" />
+	<context id="context1">
+		<commentGenerator>
+			<property name="suppressAllComments" value="true" />
+			<property name="suppressDate" value="true" />
+		</commentGenerator>
+		<jdbcConnection driverClass="com.mysql.jdbc.Driver"
+			connectionURL="jdbc:mysql://localhost:3306/testplatform?useUnicode=true&amp;characterEncoding=utf-8"
+			userId="root" password="root" />
+		<javaModelGenerator targetPackage="com.cpit.testplatform.modules.display.entity"
+			targetProject="..\..\src" />
+		<sqlMapGenerator targetPackage="display"
+			targetProject="..\..\resources\mappings\modules" />
+		<javaClientGenerator targetPackage="com.cpit.testplatform.modules.display.dao"
+			targetProject="..\..\src" type="XMLMAPPER" />
+ 
+		<table schema="" tableName="ticket_info" domainObjectName="TicketInfo"/>
+		<table schema="" tableName="ticket_track" domainObjectName="TicketTrack"/>
+		<table schema="" tableName="ticket_process" domainObjectName="TicketProcess"/>
+<!--		<table schema="" tableName="term_archive" domainObjectName="TerminalArchive"/>-->
+	</context>
+</generatorConfiguration>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cpit.testplatform.modules.backup.dao.BackupPlanDao" >
+  <resultMap id="BaseResultMap" type="com.cpit.testplatform.modules.backup.entity.BackupPlan" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="level" property="level" jdbcType="INTEGER" />
+    <result column="value" property="value" jdbcType="INTEGER" />
+    <result column="start_time" property="startTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, type, level, value, start_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from backup_plan
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from backup_plan
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.cpit.testplatform.modules.backup.entity.BackupPlan" >
+    insert into backup_plan (id, type, level, 
+      value, start_time)
+    values (#{id,jdbcType=INTEGER}, #{type,jdbcType=INTEGER}, #{level,jdbcType=INTEGER}, 
+      #{value,jdbcType=INTEGER}, #{startTime,jdbcType=TIMESTAMP})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.cpit.testplatform.modules.backup.entity.BackupPlan" >
+    update backup_plan
+    set type = #{type,jdbcType=INTEGER},
+      level = #{level,jdbcType=INTEGER},
+      value = #{value,jdbcType=INTEGER},
+      start_time = #{startTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="findList" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from backup_plan
+  </select>
+  
+</mapper>

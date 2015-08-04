@@ -1,0 +1,46 @@
+SET SESSION FOREIGN_KEY_CHECKS=0;
+
+/* Drop Tables */
+
+DROP TABLE ticket_info;
+DROP TABLE ticket_track;
+DROP TABLE ticket_process;
+
+
+
+/* Create Tables */
+
+CREATE TABLE ticket_info
+(
+  ticket_id varchar(64) NOT NULL COMMENT '工单号',
+	ne_id varchar(100) NOT NULL COMMENT '网元编号',
+	ne_label varchar(100) NOT NULL COMMENT '网元名称',
+	maintainer_id varchar(64) NOT NULL COMMENT '工单号',
+	create_time timestamp NOT NULL COMMENT '下达时间',
+	detail varchar(1000) NOT NULL COMMENT '故障信息',
+	flag int NOT NULL COMMENT '结束标志',
+  end_time timestamp NULL COMMENT '结束时间',
+  result varchar(1000) NULL COMMENT '处理结果',
+	PRIMARY KEY (ticket_id)
+) COMMENT = '工单表';
+
+
+CREATE TABLE ticket_track
+(
+  ticket_id varchar(64) NOT NULL COMMENT '工单号',
+	record_time timestamp NOT NULL COMMENT '时间',
+	longtitude double NOT NULL COMMENT '经度',
+	latitude double NOT NULL COMMENT '纬度',
+	altitude double NOT NULL COMMENT '高度',
+	PRIMARY KEY (ticket_id, record_time)
+) COMMENT = '工单轨迹表';
+
+CREATE TABLE ticket_process
+(
+  ticket_id varchar(64) NOT NULL COMMENT '工单号',
+	process_time timestamp NOT NULL COMMENT '时间',
+	process_result varchar(1000 NOT NULL COMMENT '处理措施',
+	PRIMARY KEY (ticket_id, process_time)
+) COMMENT = '工单处理过程表';
+
+

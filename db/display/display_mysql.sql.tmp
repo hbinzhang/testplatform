@@ -1,0 +1,41 @@
+SET SESSION FOREIGN_KEY_CHECKS=0;
+
+/* Drop Tables */
+
+DROP TABLE alarm_current;
+DROP TABLE alarm_history;
+
+
+
+/* Create Tables */
+
+CREATE TABLE alarm_current
+(
+  alarm_id int NOT NULL COMMENT '告警号',
+	ne_id varchar(100) NOT NULL COMMENT '网元编号',
+	ne_label varchar(100) NOT NULL COMMENT '网元名称',
+	alarm_time timestamp NOT NULL COMMENT '产生时间',
+	severity char(1) NOT NULL COMMENT '告警级别',
+	source varchar(200) NOT NULL COMMENT '告警源',
+	type varchar(100) NOT NULL COMMENT '告警类型',
+	probableCause varchar(1000) NOT NULL COMMENT '可能原因',
+	PRIMARY KEY (alarm_id)
+) COMMENT = '活动告警表';
+
+
+CREATE TABLE alarm_history
+(
+  alarm_id int NOT NULL COMMENT '告警号',
+	ne_id varchar(100) NOT NULL COMMENT '网元编号',
+	ne_label varchar(100) NOT NULL COMMENT '网元名称',
+	alarm_time timestamp NOT NULL COMMENT '产生时间',
+	duration int NOT NULL COMMENT '持续时间',
+	severity char(1) NOT NULL COMMENT '告警级别',
+	source varchar(200) NOT NULL COMMENT '告警源',
+	type varchar(100) NOT NULL COMMENT '告警类型',
+	PRIMARY KEY (alarm_id)
+) COMMENT = '历史告警表';
+
+
+
+

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cpit.testplatform.modules.test.dao.AlarmDao" >
+<resultMap id="BaseResultMap" type="com.cpit.testplatform.modules.test.entity.Alarm" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <id column="streamCode" property="streamCode" jdbcType="VARCHAR" />
+    <id column="type" property="type" jdbcType="VARCHAR" />
+    <id column="name" property="name" jdbcType="VARCHAR" />
+    <id column="neid" property="neid" jdbcType="VARCHAR" />
+    <id column="level" property="level" jdbcType="VARCHAR" />
+    <id column="effect" property="effect" jdbcType="VARCHAR" />
+    <id column="description" property="description" jdbcType="VARCHAR" />
+    <id column="createTime" property="createTime" jdbcType="VARCHAR" />
+    <id column="isClear" property="clear" jdbcType="VARCHAR" />
+    <id column="clearTime" property="clearTime" jdbcType="VARCHAR" />
+    <id column="isAck" property="ack" jdbcType="VARCHAR" />
+    <id column="ackTime" property="ackTime" jdbcType="VARCHAR" />
+    <id column="maintainerId" property="maintainerId" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+    id, streamCode, type, name , neid , level , effect , description , createTime
+    , isClear , clearTime , isAck , ackTime , maintainerId
+  </sql>
+  <select id="get" resultMap="BaseResultMap"  >
+    select 
+    <include refid="Base_Column_List" />
+    from alarm
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <select id="getByStreamCode" resultMap="BaseResultMap"  >
+    select 
+    <include refid="Base_Column_List" />
+    from alarm
+    where streamCode = #{streamCode,jdbcType=VARCHAR}
+  </select>
+  <select id="getAlarmCountByLevel" parameterType="java.util.Map" resultType="java.lang.Integer">
+    select 
+    count(1)
+    from alarm
+    where level = #{level,jdbcType=VARCHAR}
+    and neid = #{neid,jdbcType=VARCHAR}
+  </select>
+	<!-- 分页查询用户信息 -->
+	<select id="findList" resultMap="BaseResultMap">
+		SELECT
+		<include refid="Base_Column_List" />
+		from alarm a
+		WHERE 1 = 1
+		<!-- 数据范围过滤 -->
+		${sqlMap.dsf}
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.name
+			</otherwise>
+		</choose>
+	</select>
+	<!-- 根据登录名查询用户 -->
+	<select id="getByNeid" resultMap="BaseResultMap" >
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM alarm a
+		WHERE a.neid = #{neid,jdbcType=VARCHAR}
+	</select>
+  <update id="delete" parameterType="java.lang.String" >
+    delete from alarm 
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  
+	<update id="update"
+		parameterType="com.cpit.testplatform.modules.test.entity.Alarm">
+		update alarm
+		set 
+		streamCode = #{streamCode,jdbcType=VARCHAR},
+		type = #{type,jdbcType=VARCHAR},
+		name = #{name,jdbcType=VARCHAR},
+		neid = #{neid,jdbcType=VARCHAR},
+		level = #{level,jdbcType=VARCHAR},
+		effect = #{effect,jdbcType=VARCHAR},
+		description = #{description,jdbcType=VARCHAR},
+		createTime = #{createTime,jdbcType=VARCHAR},
+		isClear = #{clear,jdbcType=VARCHAR},
+		clearTime = #{clearTime,jdbcType=VARCHAR},
+		isAck = #{ack,jdbcType=VARCHAR},
+		ackTime = #{ackTime,jdbcType=VARCHAR},
+		maintainerId = #{maintainerId,jdbcType=VARCHAR}
+		where id=#{id,jdbcType=VARCHAR}
+	</update>
+</mapper>
