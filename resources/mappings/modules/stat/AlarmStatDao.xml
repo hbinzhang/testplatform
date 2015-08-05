@@ -35,7 +35,7 @@
 		resultMap="BaseResultMap">
 		select 
 		<if test="total != null and total == 2">
-		d.AREACODE as ne_id, v.name as ne_label,  sum(s.total) as total,
+		v.code as ne_id, v.name as ne_label,  sum(s.total) as total,
 		sum(s.criticalCount) as criticalCount,sum(s.majorCount) as majorCount,
 		sum(s.minorCount) as minorCount,sum(s.warnCount) as warnCount, sum(s.duration) as duration
 		from stat_alarm_day s, areadevices d, areadivision v  
@@ -53,7 +53,7 @@
 		  and d.AREACODE =#{neLabel,jdbcType=VARCHAR}
 		  </if>
 		and d.AREACODE = v.code
-		group by d.AREACODE, v.name  
+		group by d.AREACODE  
 		</if>
 		<if test="total == null or total != 2">
 		  <if test="neLabel != null and neLabel != ''">
@@ -63,30 +63,31 @@
 		
 	</select>
 
-	<select id="selectByMonth" parameterType="com.cpit.testplatform.modules.stat.entity.AlarmStat"
+	<!-- <select id="selectByMonth" parameterType="com.cpit.testplatform.modules.stat.entity.AlarmStat"
 		resultMap="BaseResultMap">
 		select 
 		<if test="total != null and total == 2">
-		d.AREACODE as ne_id, v.name as ne_label,  sum(s.total) as total,
+		v.code as ne_id, v.name as ne_label,  sum(s.total) as total,
 		sum(s.criticalCount) as criticalCount,sum(s.majorCount) as majorCount,
 		sum(s.minorCount) as minorCount,sum(s.warnCount) as warnCount,  sum(s.duration) as duration  
 		from stat_alarm_day s, areadevices d, areadivision v  
 		</if>
 		<if test="total == null or total != 2">
-		s.ne_id, s.ne_label, sum(s.total) as total, sum(s.duration) as duration  
+		s.ne_id, s.ne_label, sum(s.total) as total, 
+		sum(s.criticalCount) as criticalCount,sum(s.majorCount) as majorCount,
+		sum(s.minorCount) as minorCount,sum(s.warnCount) as warnCount,
+		sum(s.duration) as duration  
 		from stat_alarm_day s, areadevices d
 		</if>
 		where s.ne_id = d.DEVICEID
 		and s.stat_time &gt;= #{statTime,jdbcType=DATE} and s.stat_time &lt;
-		<if test="dbName == 'oracle'">add_months(#{statTime,jdbcType=DATE},1)</if>
-		<if test="dbName == 'mysql'">date_add(#{statTime,jdbcType=DATE}, interval 1 month)</if>
-		
+		date_add(#{statTime,jdbcType=DATE}, interval 1 month)
 		<if test="total != null and total == 2">
 		  <if test="neLabel != null and neLabel != ''">
 		  and d.AREACODE =#{neLabel,jdbcType=VARCHAR} 
 		  </if>
 		and d.AREACODE = v.code
-		group by d.AREACODE  , v.name 
+		group by d.AREACODE  
 		</if>
 		<if test="total == null or total != 2">
 		  <if test="neLabel != null and neLabel != ''">
@@ -94,8 +95,43 @@
 		  </if>
 		group by s.ne_id
 		</if>
-	</select>
+	</select> -->
 
+	<!-- oracle -->
+	<select id="selectByMonth" parameterType="com.cpit.testplatform.modules.stat.entity.AlarmStat"
+		resultMap="BaseResultMap">
+		select 
+		<if test="total != null and total == 2">
+		v.code as ne_id, v.name as ne_label,  sum(s.total) as total,
+		sum(s.criticalCount) as criticalCount,sum(s.majorCount) as majorCount,
+		sum(s.minorCount) as minorCount,sum(s.warnCount) as warnCount,  sum(s.duration) as duration  
+		from stat_alarm_day s, areadevices d, areadivision v  
+		</if>
+		<if test="total == null or total != 2">
+		s.ne_id, s.ne_label, sum(s.total) as total, 
+		sum(s.criticalCount) as criticalCount,sum(s.majorCount) as majorCount,
+		sum(s.minorCount) as minorCount,sum(s.warnCount) as warnCount,
+		sum(s.duration) as duration  
+		from stat_alarm_day s, areadevices d
+		</if>
+		where s.ne_id = d.DEVICEID
+		and s.stat_time &gt;= #{statTime,jdbcType=DATE} and s.stat_time &lt;
+		(#{statTime,jdbcType=DATE} + 30)
+		<if test="total != null and total == 2">
+		  <if test="neLabel != null and neLabel != ''">
+		  and d.AREACODE =#{neLabel,jdbcType=VARCHAR} 
+		  </if>
+		and d.AREACODE = v.code
+		group by d.AREACODE  
+		</if>
+		<if test="total == null or total != 2">
+		  <if test="neLabel != null and neLabel != ''">
+		  and s.ne_id =#{neLabel,jdbcType=VARCHAR} 
+		  </if>
+		group by s.ne_id, s.ne_Label
+		</if>
+	</select>
+	
 	<update id="addStat" parameterType="com.cpit.testplatform.modules.stat.entity.AlarmStat">
 		update stat_alarm_day
 		set total = total + #{total,jdbcType=INTEGER},
